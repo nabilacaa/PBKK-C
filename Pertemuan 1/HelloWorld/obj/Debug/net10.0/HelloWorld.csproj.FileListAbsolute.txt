@@ -1,0 +1,14 @@
+D:\ITS\SEM 5\PBKK\HelloWorld\bin\Debug\net10.0\HelloWorld.exe
+D:\ITS\SEM 5\PBKK\HelloWorld\bin\Debug\net10.0\HelloWorld.deps.json
+D:\ITS\SEM 5\PBKK\HelloWorld\bin\Debug\net10.0\HelloWorld.runtimeconfig.json
+D:\ITS\SEM 5\PBKK\HelloWorld\bin\Debug\net10.0\HelloWorld.dll
+D:\ITS\SEM 5\PBKK\HelloWorld\bin\Debug\net10.0\HelloWorld.pdb
+D:\ITS\SEM 5\PBKK\HelloWorld\obj\Debug\net10.0\HelloWorld.GeneratedMSBuildEditorConfig.editorconfig
+D:\ITS\SEM 5\PBKK\HelloWorld\obj\Debug\net10.0\HelloWorld.AssemblyInfoInputs.cache
+D:\ITS\SEM 5\PBKK\HelloWorld\obj\Debug\net10.0\HelloWorld.AssemblyInfo.cs
+D:\ITS\SEM 5\PBKK\HelloWorld\obj\Debug\net10.0\HelloWorld.csproj.CoreCompileInputs.cache
+D:\ITS\SEM 5\PBKK\HelloWorld\obj\Debug\net10.0\HelloWorld.dll
+D:\ITS\SEM 5\PBKK\HelloWorld\obj\Debug\net10.0\refint\HelloWorld.dll
+D:\ITS\SEM 5\PBKK\HelloWorld\obj\Debug\net10.0\HelloWorld.pdb
+D:\ITS\SEM 5\PBKK\HelloWorld\obj\Debug\net10.0\HelloWorld.genruntimeconfig.cache
+D:\ITS\SEM 5\PBKK\HelloWorld\obj\Debug\net10.0\ref\HelloWorld.dll

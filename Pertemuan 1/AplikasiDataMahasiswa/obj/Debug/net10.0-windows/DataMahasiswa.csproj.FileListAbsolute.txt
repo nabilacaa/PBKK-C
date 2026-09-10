@@ -1,0 +1,14 @@
+D:\ITS\SEM 5\PBKK\Tugas\Tugas1\DataMahasiswa\obj\Debug\net10.0-windows\DataMahasiswa.GeneratedMSBuildEditorConfig.editorconfig
+D:\ITS\SEM 5\PBKK\Tugas\Tugas1\DataMahasiswa\obj\Debug\net10.0-windows\DataMahasiswa.AssemblyInfoInputs.cache
+D:\ITS\SEM 5\PBKK\Tugas\Tugas1\DataMahasiswa\obj\Debug\net10.0-windows\DataMahasiswa.AssemblyInfo.cs
+D:\ITS\SEM 5\PBKK\Tugas\Tugas1\DataMahasiswa\obj\Debug\net10.0-windows\DataMahasiswa.csproj.CoreCompileInputs.cache
+D:\ITS\SEM 5\PBKK\Tugas\Tugas1\DataMahasiswa\bin\Debug\net10.0-windows\DataMahasiswa.exe
+D:\ITS\SEM 5\PBKK\Tugas\Tugas1\DataMahasiswa\bin\Debug\net10.0-windows\DataMahasiswa.deps.json
+D:\ITS\SEM 5\PBKK\Tugas\Tugas1\DataMahasiswa\bin\Debug\net10.0-windows\DataMahasiswa.runtimeconfig.json
+D:\ITS\SEM 5\PBKK\Tugas\Tugas1\DataMahasiswa\bin\Debug\net10.0-windows\DataMahasiswa.dll
+D:\ITS\SEM 5\PBKK\Tugas\Tugas1\DataMahasiswa\bin\Debug\net10.0-windows\DataMahasiswa.pdb
+D:\ITS\SEM 5\PBKK\Tugas\Tugas1\DataMahasiswa\obj\Debug\net10.0-windows\DataMahasiswa.dll
+D:\ITS\SEM 5\PBKK\Tugas\Tugas1\DataMahasiswa\obj\Debug\net10.0-windows\refint\DataMahasiswa.dll
+D:\ITS\SEM 5\PBKK\Tugas\Tugas1\DataMahasiswa\obj\Debug\net10.0-windows\DataMahasiswa.pdb
+D:\ITS\SEM 5\PBKK\Tugas\Tugas1\DataMahasiswa\obj\Debug\net10.0-windows\DataMahasiswa.genruntimeconfig.cache
+D:\ITS\SEM 5\PBKK\Tugas\Tugas1\DataMahasiswa\obj\Debug\net10.0-windows\ref\DataMahasiswa.dll

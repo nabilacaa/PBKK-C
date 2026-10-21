@@ -1,0 +1,196 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="KalkulatorSaintifik.MainWindow"
+        Title="Kalkulator Saintifik"
+        Width="820" Height="640"
+        MinWidth="440" MinHeight="560"
+        WindowStartupLocation="CenterScreen"
+        Background="#16181D">
+
+    <Window.Styles>
+        <!-- Satu style dasar untuk semua tombol keypad: ukuran dan margin seragam -->
+        <Style Selector="Grid.keypad > Button">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Margin" Value="3" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="FontSize" Value="20" />
+            <!-- Tombol tidak mengambil fokus, supaya Enter di keyboard tidak "mengklik" tombol terakhir -->
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Background" Value="#2A2E37" />
+            <Setter Property="Foreground" Value="#E8EAED" />
+        </Style>
+        <Style Selector="Grid.keypad > Button:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#363B46" />
+        </Style>
+
+        <Style Selector="Grid.keypad > Button.angka">
+            <Setter Property="Background" Value="#3A3F4B" />
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="Grid.keypad > Button.angka:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#474D5B" />
+        </Style>
+
+        <Style Selector="Grid.keypad > Button.sains">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Foreground" Value="#B9C2D0" />
+        </Style>
+
+        <Style Selector="Grid.keypad > Button.operator">
+            <Setter Property="Foreground" Value="#7CC4FA" />
+            <Setter Property="FontSize" Value="24" />
+        </Style>
+
+        <Style Selector="Grid.keypad > Button.hapus">
+            <Setter Property="Foreground" Value="#FF8A80" />
+            <Setter Property="FontSize" Value="17" />
+        </Style>
+
+        <Style Selector="Grid.keypad > Button.samadengan">
+            <Setter Property="Background" Value="#2F80ED" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="26" />
+        </Style>
+        <Style Selector="Grid.keypad > Button.samadengan:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#4A93F0" />
+        </Style>
+
+        <Style Selector="ListBox#ListRiwayat ListBoxItem">
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+    </Window.Styles>
+
+    <Grid ColumnDefinitions="*,Auto" Margin="14">
+
+        <!-- ===================== Kalkulator ===================== -->
+        <Grid Grid.Column="0" RowDefinitions="Auto,Auto,Auto,*">
+
+            <!-- Header: judul, mode sudut, tombol riwayat -->
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="2,0,2,8">
+                <TextBlock x:Name="LblJudul" Text="Kalkulator"
+                           FontSize="18" FontWeight="SemiBold"
+                           Foreground="#E8EAED" VerticalAlignment="Center" />
+                <Border Grid.Column="1" x:Name="BadgeMode"
+                        Background="#1E3A52" CornerRadius="10" Padding="10,3"
+                        Margin="0,0,8,0" VerticalAlignment="Center">
+                    <TextBlock x:Name="TxtMode" Text="DEG" FontSize="12"
+                               FontWeight="Bold" Foreground="#7CC4FA" />
+                </Border>
+                <ToggleButton Grid.Column="2" x:Name="BtnTampilRiwayat"
+                              Content="Riwayat" IsChecked="True" Focusable="False"
+                              FontSize="13" Padding="12,4" />
+            </Grid>
+
+            <!-- Layar -->
+            <Border Grid.Row="1" Background="#0F1115" CornerRadius="12"
+                    Padding="16,10" Margin="3,0,3,10" MinHeight="118">
+                <StackPanel VerticalAlignment="Bottom" Spacing="2">
+                    <TextBlock x:Name="TxtEkspresi" Text=""
+                               FontSize="18" Foreground="#8A919E"
+                               HorizontalAlignment="Right" TextTrimming="CharacterEllipsis" />
+                    <!-- Viewbox mengecilkan angka panjang supaya tidak terpotong -->
+                    <Viewbox StretchDirection="DownOnly" Stretch="Uniform"
+                             HorizontalAlignment="Right" Height="64">
+                        <TextBlock x:Name="TxtLayar" Text="0"
+                                   FontSize="52" FontWeight="SemiBold"
+                                   Foreground="#FFFFFF" />
+                    </Viewbox>
+                </StackPanel>
+            </Border>
+
+            <!-- Pesan error kecil di bawah layar -->
+            <TextBlock Grid.Row="2" x:Name="TxtError" Text=""
+                       Foreground="#FF6B6B" FontSize="13"
+                       Height="18" Margin="6,-6,6,4" />
+
+            <!-- Keypad: 5 kolom x 7 baris -->
+            <Grid Grid.Row="3" Classes="keypad"
+                  ColumnDefinitions="*,*,*,*,*"
+                  RowDefinitions="*,*,*,*,*,*,*">
+
+                <!-- Baris 0: fungsi saintifik -->
+                <Button Grid.Row="0" Grid.Column="0" Classes="sains" Content="x²"  Tag="Kuadrat"   Click="OnFungsiClick" />
+                <Button Grid.Row="0" Grid.Column="1" Classes="sains" Content="√x"  Tag="Akar"      Click="OnFungsiClick" />
+                <Button Grid.Row="0" Grid.Column="2" Classes="sains" Content="xʸ"  Tag="Pangkat"   Click="OnOperatorClick" />
+                <Button Grid.Row="0" Grid.Column="3" Classes="sains" Content="1/x" Tag="Kebalikan" Click="OnFungsiClick" />
+                <Button Grid.Row="0" Grid.Column="4" Classes="sains" Content="n!"  Tag="Faktorial" Click="OnFungsiClick" />
+
+                <!-- Baris 1 -->
+                <Button Grid.Row="1" Grid.Column="0" Classes="sains" Content="ln"  Tag="Ln"     Click="OnFungsiClick" />
+                <Button Grid.Row="1" Grid.Column="1" Classes="sains" Content="log" Tag="Log"    Click="OnFungsiClick" />
+                <Button Grid.Row="1" Grid.Column="2" Classes="sains" Content="|x|" Tag="Mutlak" Click="OnFungsiClick" />
+                <Button Grid.Row="1" Grid.Column="3" Classes="sains" Content="π"   Tag="pi"     Click="OnKonstantaClick" />
+                <Button Grid.Row="1" Grid.Column="4" Classes="sains" Content="e"   Tag="e"      Click="OnKonstantaClick" />
+
+                <!-- Baris 2 -->
+                <Button Grid.Row="2" Grid.Column="0" Classes="sains" x:Name="BtnMode" Content="DEG" Click="OnModeClick" />
+                <Button Grid.Row="2" Grid.Column="1" Classes="hapus" x:Name="BtnClearEntry" Content="CE" Click="OnClearEntryClick" />
+                <Button Grid.Row="2" Grid.Column="2" Classes="hapus" x:Name="BtnClear"      Content="C"  Click="OnClearClick" />
+                <Button Grid.Row="2" Grid.Column="3" Classes="hapus" x:Name="BtnBackspace"  Content="⌫"  Click="OnBackspaceClick" />
+                <Button Grid.Row="2" Grid.Column="4" Classes="operator" x:Name="BtnDivide"  Content="÷"  Tag="Bagi" Click="OnOperatorClick" />
+
+                <!-- Baris 3 -->
+                <Button Grid.Row="3" Grid.Column="0" Classes="sains" Content="sin" Tag="Sin" Click="OnFungsiClick" />
+                <Button Grid.Row="3" Grid.Column="1" Classes="angka" x:Name="Btn7" Content="7" Tag="7" Click="OnAngkaClick" />
+                <Button Grid.Row="3" Grid.Column="2" Classes="angka" x:Name="Btn8" Content="8" Tag="8" Click="OnAngkaClick" />
+                <Button Grid.Row="3" Grid.Column="3" Classes="angka" x:Name="Btn9" Content="9" Tag="9" Click="OnAngkaClick" />
+                <Button Grid.Row="3" Grid.Column="4" Classes="operator" x:Name="BtnMultiply" Content="×" Tag="Kali" Click="OnOperatorClick" />
+
+                <!-- Baris 4 -->
+                <Button Grid.Row="4" Grid.Column="0" Classes="sains" Content="cos" Tag="Cos" Click="OnFungsiClick" />
+                <Button Grid.Row="4" Grid.Column="1" Classes="angka" x:Name="Btn4" Content="4" Tag="4" Click="OnAngkaClick" />
+                <Button Grid.Row="4" Grid.Column="2" Classes="angka" x:Name="Btn5" Content="5" Tag="5" Click="OnAngkaClick" />
+                <Button Grid.Row="4" Grid.Column="3" Classes="angka" x:Name="Btn6" Content="6" Tag="6" Click="OnAngkaClick" />
+                <Button Grid.Row="4" Grid.Column="4" Classes="operator" x:Name="BtnMinus" Content="−" Tag="Kurang" Click="OnOperatorClick" />
+
+                <!-- Baris 5 -->
+                <Button Grid.Row="5" Grid.Column="0" Classes="sains" Content="tan" Tag="Tan" Click="OnFungsiClick" />
+                <Button Grid.Row="5" Grid.Column="1" Classes="angka" x:Name="Btn1" Content="1" Tag="1" Click="OnAngkaClick" />
+                <Button Grid.Row="5" Grid.Column="2" Classes="angka" x:Name="Btn2" Content="2" Tag="2" Click="OnAngkaClick" />
+                <Button Grid.Row="5" Grid.Column="3" Classes="angka" x:Name="Btn3" Content="3" Tag="3" Click="OnAngkaClick" />
+                <Button Grid.Row="5" Grid.Column="4" Classes="operator" x:Name="BtnPlus" Content="+" Tag="Tambah" Click="OnOperatorClick" />
+
+                <!-- Baris 6 -->
+                <Button Grid.Row="6" Grid.Column="0" Classes="sains" x:Name="BtnPersen" Content="%" Click="OnPersenClick" />
+                <Button Grid.Row="6" Grid.Column="1" Classes="angka" x:Name="BtnNegate"  Content="±" Click="OnGantiTandaClick" />
+                <Button Grid.Row="6" Grid.Column="2" Classes="angka" x:Name="Btn0" Content="0" Tag="0" Click="OnAngkaClick" />
+                <Button Grid.Row="6" Grid.Column="3" Classes="angka" x:Name="BtnDecimal" Content="." Click="OnTitikClick" />
+                <Button Grid.Row="6" Grid.Column="4" Classes="samadengan" x:Name="BtnEquals" Content="=" Click="OnSamaDenganClick" />
+            </Grid>
+        </Grid>
+
+        <!-- ===================== Panel Riwayat ===================== -->
+        <Border Grid.Column="1" x:Name="PanelRiwayat"
+                IsVisible="{Binding #BtnTampilRiwayat.IsChecked}"
+                Width="250" Margin="12,0,0,0"
+                Background="#1C1F26" CornerRadius="12" Padding="10">
+            <Grid RowDefinitions="Auto,*,Auto">
+                <TextBlock Text="Riwayat" FontSize="16" FontWeight="SemiBold"
+                           Foreground="#E8EAED" Margin="4,2,0,8" />
+                <TextBlock Grid.Row="1" x:Name="TxtRiwayatKosong"
+                           Text="Belum ada perhitungan."
+                           Foreground="#6B7280" FontSize="13" Margin="4,0" />
+                <ListBox Grid.Row="1" x:Name="ListRiwayat"
+                         Background="Transparent"
+                         SelectionMode="Single"
+                         Tapped="OnRiwayatTapped">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <TextBlock Text="{Binding}" TextWrapping="Wrap"
+                                       FontSize="14" Foreground="#C9CFD8" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button Grid.Row="2" Content="Hapus riwayat"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                        Focusable="False" Margin="0,8,0,0"
+                        Click="OnHapusRiwayatClick" />
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

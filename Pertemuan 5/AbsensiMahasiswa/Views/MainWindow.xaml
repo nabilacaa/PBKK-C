@@ -1,0 +1,250 @@
+<Window x:Class="AbsensiMahasiswa.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Sistem Absensi Mahasiswa - WPF MVVM"
+        Height="700" Width="1150" MinHeight="600" MinWidth="980"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BackgroundBrush}"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing">
+
+    <DockPanel>
+
+        <!-- ================= HEADER ================= -->
+        <Border DockPanel.Dock="Top" Background="{StaticResource PrimaryBrush}" Padding="20,14">
+            <StackPanel>
+                <TextBlock Text="Sistem Absensi Mahasiswa" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="Kelola data mahasiswa dan catat kehadiran per mata kuliah"
+                           Foreground="#BFDBFE" Margin="0,2,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <TabControl Margin="16" Padding="0" BorderThickness="0" Background="Transparent">
+
+            <!-- ================= TAB 1: DATA MAHASISWA ================= -->
+            <TabItem Header="  Data Mahasiswa  " DataContext="{Binding StudentVM}">
+                <Grid Margin="0,12,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="320"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Form -->
+                    <Border Grid.Column="0" Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="{Binding FormTitle}" Style="{StaticResource SectionTitle}"/>
+
+                            <TextBlock Text="NRP (10 digit):" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding NrpInput, UpdateSourceTrigger=PropertyChanged}"
+                                     MaxLength="10"
+                                     PreviewTextInput="NumberOnly_PreviewTextInput"/>
+
+                            <TextBlock Text="Nama Lengkap:" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding NamaInput, UpdateSourceTrigger=PropertyChanged}" MaxLength="100"/>
+
+                            <TextBlock Text="Jurusan:" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox ItemsSource="{Binding JurusanList}"
+                                      SelectedItem="{Binding JurusanInput}"/>
+
+                            <TextBlock Text="Email:" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding EmailInput, UpdateSourceTrigger=PropertyChanged}" MaxLength="100"/>
+
+                            <WrapPanel Margin="0,18,0,0">
+                                <Button Content="Tambah" Command="{Binding AddCommand}" Style="{StaticResource PrimaryButton}"/>
+                                <Button Content="Ubah" Command="{Binding UpdateCommand}" Style="{StaticResource PrimaryButton}"/>
+                                <Button Content="Hapus" Command="{Binding DeleteCommand}" Style="{StaticResource DangerButton}"/>
+                                <Button Content="Reset" Command="{Binding ResetCommand}" Style="{StaticResource SecondaryButton}"/>
+                            </WrapPanel>
+
+                            <TextBlock TextWrapping="Wrap" Foreground="{StaticResource TextMutedBrush}" FontSize="11" Margin="0,8,0,0"
+                                       Text="Klik baris pada tabel untuk mengubah atau menghapus data. Tekan Reset untuk kembali ke mode tambah."/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Tabel -->
+                    <Border Grid.Column="2" Style="{StaticResource Card}">
+                        <DockPanel>
+                            <Grid DockPanel.Dock="Top" Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Cari:" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="SemiBold"/>
+                                <TextBox Grid.Column="1" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                         ToolTip="Cari berdasarkan NRP, nama, atau jurusan"/>
+                                <Button Grid.Column="2" Content="Muat Ulang" Command="{Binding RefreshCommand}"
+                                        Style="{StaticResource SecondaryButton}" Margin="8,0,0,0"/>
+                            </Grid>
+
+                            <TextBlock DockPanel.Dock="Bottom" Text="{Binding CountText}"
+                                       Foreground="{StaticResource TextMutedBrush}" Margin="0,8,0,0"/>
+
+                            <DataGrid ItemsSource="{Binding StudentsView}"
+                                      SelectedItem="{Binding SelectedStudent}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="NRP" Binding="{Binding Nrp}" Width="110"/>
+                                    <DataGridTextColumn Header="Nama" Binding="{Binding Nama}" Width="180"/>
+                                    <DataGridTextColumn Header="Jurusan" Binding="{Binding Jurusan}" Width="150"/>
+                                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DockPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- ================= TAB 2: ABSENSI ================= -->
+            <TabItem Header="  Absensi  " DataContext="{Binding AttendanceVM}">
+                <Grid Margin="0,12,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="320"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Form -->
+                    <Border Grid.Column="0" Style="{StaticResource Card}">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <TextBlock Text="{Binding FormTitle}" Style="{StaticResource SectionTitle}"/>
+
+                                <TextBlock Text="Mahasiswa:" Style="{StaticResource FieldLabel}"/>
+                                <ComboBox ItemsSource="{Binding Students}"
+                                          SelectedItem="{Binding SelectedStudentInput}"
+                                          DisplayMemberPath="Display"/>
+
+                                <TextBlock Text="Mata Kuliah:" Style="{StaticResource FieldLabel}"/>
+                                <ComboBox ItemsSource="{Binding MataKuliahList}"
+                                          SelectedItem="{Binding MataKuliahInput}"/>
+
+                                <TextBlock Text="Tanggal:" Style="{StaticResource FieldLabel}"/>
+                                <DatePicker SelectedDate="{Binding TanggalInput}" SelectedDateFormat="Long"/>
+
+                                <TextBlock Text="Status Kehadiran:" Style="{StaticResource FieldLabel}"/>
+                                <WrapPanel>
+                                    <RadioButton Content="Hadir" Margin="0,0,14,4"
+                                                 IsChecked="{Binding StatusInput, Converter={StaticResource StatusToBool}, ConverterParameter=Hadir}"/>
+                                    <RadioButton Content="Izin" Margin="0,0,14,4"
+                                                 IsChecked="{Binding StatusInput, Converter={StaticResource StatusToBool}, ConverterParameter=Izin}"/>
+                                    <RadioButton Content="Sakit" Margin="0,0,14,4"
+                                                 IsChecked="{Binding StatusInput, Converter={StaticResource StatusToBool}, ConverterParameter=Sakit}"/>
+                                    <RadioButton Content="Alpha" Margin="0,0,14,4"
+                                                 IsChecked="{Binding StatusInput, Converter={StaticResource StatusToBool}, ConverterParameter=Alpha}"/>
+                                </WrapPanel>
+
+                                <TextBlock Text="{Binding KeteranganHint}" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Text="{Binding KeteranganInput, UpdateSourceTrigger=PropertyChanged}"
+                                         MaxLength="200" Height="60" TextWrapping="Wrap" AcceptsReturn="False"
+                                         VerticalContentAlignment="Top"/>
+
+                                <WrapPanel Margin="0,18,0,0">
+                                    <Button Content="Simpan" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}"/>
+                                    <Button Content="Ubah" Command="{Binding UpdateCommand}" Style="{StaticResource PrimaryButton}"/>
+                                    <Button Content="Hapus" Command="{Binding DeleteCommand}" Style="{StaticResource DangerButton}"/>
+                                    <Button Content="Reset" Command="{Binding ResetCommand}" Style="{StaticResource SecondaryButton}"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- Data + rekap -->
+                    <Border Grid.Column="2" Style="{StaticResource Card}">
+                        <DockPanel>
+
+                            <!-- Filter -->
+                            <WrapPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+                                <TextBlock Text="Filter:" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,8,8"/>
+                                <ComboBox Width="250" Margin="0,0,8,8"
+                                          ItemsSource="{Binding FilterMatkulList}"
+                                          SelectedItem="{Binding FilterMatkul}"/>
+                                <DatePicker Width="140" Margin="0,0,8,8"
+                                            SelectedDate="{Binding FilterTanggal}"/>
+                                <Button Content="Hapus Filter" Command="{Binding ClearFilterCommand}"
+                                        Style="{StaticResource SecondaryButton}"/>
+                            </WrapPanel>
+
+                            <!-- Rekap -->
+                            <WrapPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
+                                <Border Style="{StaticResource StatCard}" Background="#334155">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Total}" Style="{StaticResource StatValue}"/>
+                                        <TextBlock Text="Total" Style="{StaticResource StatLabel}"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource StatCard}" Background="#16A34A">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Hadir}" Style="{StaticResource StatValue}"/>
+                                        <TextBlock Text="Hadir" Style="{StaticResource StatLabel}"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource StatCard}" Background="#2563EB">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Izin}" Style="{StaticResource StatValue}"/>
+                                        <TextBlock Text="Izin" Style="{StaticResource StatLabel}"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource StatCard}" Background="#D97706">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Sakit}" Style="{StaticResource StatValue}"/>
+                                        <TextBlock Text="Sakit" Style="{StaticResource StatLabel}"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource StatCard}" Background="#DC2626">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Alpha}" Style="{StaticResource StatValue}"/>
+                                        <TextBlock Text="Alpha" Style="{StaticResource StatLabel}"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource StatCard}" Background="{StaticResource PrimaryBrush}">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding PersentaseHadir}" Style="{StaticResource StatValue}"/>
+                                        <TextBlock Text="Kehadiran" Style="{StaticResource StatLabel}"/>
+                                    </StackPanel>
+                                </Border>
+                            </WrapPanel>
+
+                            <!-- Tabel absensi -->
+                            <DataGrid ItemsSource="{Binding RecordsView}"
+                                      SelectedItem="{Binding SelectedRecord}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Tanggal" Binding="{Binding Tanggal, StringFormat='dd MMM yyyy'}" Width="100"/>
+                                    <DataGridTextColumn Header="NRP" Binding="{Binding Nrp}" Width="100"/>
+                                    <DataGridTextColumn Header="Nama" Binding="{Binding Nama}" Width="150"/>
+                                    <DataGridTextColumn Header="Mata Kuliah" Binding="{Binding MataKuliah}" Width="200"/>
+                                    <DataGridTemplateColumn Header="Status" Width="80">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Border CornerRadius="4" Padding="6,1" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Background" Value="#16A34A"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Status}" Value="Izin">
+                                                                    <Setter Property="Background" Value="#2563EB"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Status}" Value="Sakit">
+                                                                    <Setter Property="Background" Value="#D97706"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Status}" Value="Alpha">
+                                                                    <Setter Property="Background" Value="#DC2626"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Text="{Binding Status}" Foreground="White" FontWeight="SemiBold" FontSize="11"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Keterangan" Binding="{Binding Keterangan}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DockPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

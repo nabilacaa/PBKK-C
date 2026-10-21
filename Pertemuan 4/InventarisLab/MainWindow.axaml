@@ -1,0 +1,288 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:InventarisLab"
+        x:Class="InventarisLab.MainWindow"
+        Title="Inventaris Alat Laboratorium"
+        Width="1180" Height="760"
+        MinWidth="1020" MinHeight="640"
+        WindowStartupLocation="CenterScreen"
+        Background="#F1F5F4">
+
+    <Window.Styles>
+        <!-- Gaya label isian -->
+        <Style Selector="TextBlock.label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="#334155"/>
+            <Setter Property="Margin" Value="0,0,0,6"/>
+        </Style>
+        <!-- Gaya kotak isian -->
+        <Style Selector="TextBox.isian">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="#0F172A"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+        </Style>
+        <Style Selector="ComboBox.isian">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+        </Style>
+        <!-- Kartu statistik -->
+        <Style Selector="Border.kartu">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="16,14"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="TextBlock.kartuJudul">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#64748B"/>
+        </Style>
+        <Style Selector="TextBlock.kartuAngka">
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,4,0,0"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid ColumnDefinitions="360,*" Margin="24">
+
+        <!-- ============ KOLOM KIRI: FORMULIR ============ -->
+        <Border Grid.Column="0"
+                Background="#FFFFFF"
+                CornerRadius="12"
+                Padding="24"
+                Margin="0,0,20,0"
+                BorderBrush="#E2E8F0"
+                BorderThickness="1">
+            <Grid RowDefinitions="Auto,*,Auto">
+
+                <StackPanel Grid.Row="0" Margin="0,0,0,18">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Border Width="34" Height="34" CornerRadius="8" Background="#0F766E">
+                            <TextBlock Text="IL" Foreground="#FFFFFF" FontWeight="Bold" FontSize="13"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Entri Alat Laboratorium" FontSize="17"
+                                       FontWeight="SemiBold" Foreground="#0F172A"/>
+                            <TextBlock Text="Catat dan kelola inventaris lab" FontSize="12"
+                                       Foreground="#64748B" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <ScrollViewer Grid.Row="1" Padding="0,0,6,0">
+                    <StackPanel Spacing="14">
+                        <StackPanel>
+                            <TextBlock Classes="label" Text="Kode Alat"/>
+                            <TextBox x:Name="txtKode" Classes="isian" PlaceholderText="Contoh: LAB-005"/>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock Classes="label" Text="Nama Alat"/>
+                            <TextBox x:Name="txtNama" Classes="isian" PlaceholderText="Contoh: Raspberry Pi 5"/>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock Classes="label" Text="Kategori"/>
+                            <ComboBox x:Name="cmbKategori" Classes="isian" PlaceholderText="Pilih kategori"/>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock Classes="label" Text="Lokasi Penyimpanan"/>
+                            <ComboBox x:Name="cmbLokasi" Classes="isian" PlaceholderText="Pilih laboratorium"/>
+                        </StackPanel>
+
+                        <Grid ColumnDefinitions="*,*">
+                            <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                                <TextBlock Classes="label" Text="Jumlah Unit"/>
+                                <NumericUpDown x:Name="numJumlah"
+                                               Minimum="0" Maximum="9999" Increment="1"
+                                               FormatString="0" Value="1"
+                                               Height="36" CornerRadius="6"
+                                               Background="#FFFFFF" BorderBrush="#CBD5E1"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="6,0,0,0">
+                                <TextBlock Classes="label" Text="Tanggal Masuk"/>
+                                <CalendarDatePicker x:Name="dpTanggal"
+                                                    HorizontalAlignment="Stretch"
+                                                    Height="36" CornerRadius="6"
+                                                    Background="#FFFFFF" BorderBrush="#CBD5E1"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel>
+                            <TextBlock Classes="label" Text="Kondisi"/>
+                            <WrapPanel Orientation="Horizontal" ItemSpacing="12">
+                                <RadioButton x:Name="rbBaik" GroupName="Kondisi" Content="Baik"/>
+                                <RadioButton x:Name="rbRusakRingan" GroupName="Kondisi" Content="Rusak Ringan"/>
+                                <RadioButton x:Name="rbRusakBerat" GroupName="Kondisi" Content="Rusak Berat"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <StackPanel Grid.Row="2" Spacing="8" Margin="0,16,0,0">
+                    <Button x:Name="btnTambah"
+                            Content="Tambah Alat"
+                            Click="BtnTambah_Click"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            Height="38" CornerRadius="6"
+                            Background="#0F766E" Foreground="#FFFFFF"
+                            FontWeight="SemiBold"/>
+
+                    <Grid ColumnDefinitions="*,*">
+                        <Button Grid.Column="0" x:Name="btnSimpan"
+                                Content="Simpan Perubahan"
+                                Click="BtnSimpan_Click"
+                                IsEnabled="False"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Height="36" Margin="0,0,4,0" CornerRadius="6"
+                                Background="#F1F5F9" Foreground="#0F172A"
+                                BorderBrush="#CBD5E1" BorderThickness="1"/>
+                        <Button Grid.Column="1" x:Name="btnHapus"
+                                Content="Hapus"
+                                Click="BtnHapus_Click"
+                                IsEnabled="False"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Height="36" Margin="4,0,0,0" CornerRadius="6"
+                                Background="#FFFFFF" Foreground="#B91C1C"
+                                BorderBrush="#FECACA" BorderThickness="1"/>
+                    </Grid>
+
+                    <Button x:Name="btnReset"
+                            Content="Reset Formulir"
+                            Click="BtnReset_Click"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            Height="32" CornerRadius="6"
+                            Background="Transparent" Foreground="#64748B"/>
+
+                    <TextBlock x:Name="txtStatus"
+                               TextWrapping="Wrap" FontSize="12"
+                               Foreground="#64748B"
+                               HorizontalAlignment="Center" TextAlignment="Center"
+                               Margin="0,2,0,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ============ KOLOM KANAN: STATISTIK, PENCARIAN, TABEL ============ -->
+        <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*,Auto">
+
+            <Grid Grid.Row="0" ColumnDefinitions="*,*,*,*" Margin="0,0,0,16">
+                <Border Grid.Column="0" Classes="kartu" Margin="0,0,10,0">
+                    <StackPanel>
+                        <TextBlock Classes="kartuJudul" Text="JENIS ALAT"/>
+                        <TextBlock x:Name="txtJenis" Classes="kartuAngka" Text="0" Foreground="#0F172A"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Classes="kartu" Margin="0,0,10,0">
+                    <StackPanel>
+                        <TextBlock Classes="kartuJudul" Text="TOTAL UNIT"/>
+                        <TextBlock x:Name="txtUnit" Classes="kartuAngka" Text="0" Foreground="#0F172A"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Classes="kartu" Margin="0,0,10,0">
+                    <StackPanel>
+                        <TextBlock Classes="kartuJudul" Text="KONDISI BAIK"/>
+                        <TextBlock x:Name="txtBaik" Classes="kartuAngka" Text="0%" Foreground="#047857"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="3" Classes="kartu">
+                    <StackPanel>
+                        <TextBlock Classes="kartuJudul" Text="PERLU PERBAIKAN"/>
+                        <TextBlock x:Name="txtRusak" Classes="kartuAngka" Text="0" Foreground="#B91C1C"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Border Grid.Row="1" Background="#FFFFFF" CornerRadius="10" Padding="8"
+                    Margin="0,0,0,16" BorderBrush="#E2E8F0" BorderThickness="1">
+                <Grid ColumnDefinitions="*,220">
+                    <TextBox Grid.Column="0" x:Name="txtCari"
+                             PlaceholderText="Cari berdasarkan kode, nama alat, atau lokasi..."
+                             Background="#FFFFFF" Foreground="#0F172A"
+                             BorderThickness="0" Height="34"
+                             TextChanged="TxtCari_TextChanged"/>
+                    <ComboBox Grid.Column="1" x:Name="cmbFilter"
+                              HorizontalAlignment="Stretch" Height="34"
+                              CornerRadius="6" BorderBrush="#E2E8F0"
+                              SelectionChanged="CmbFilter_SelectionChanged"/>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="2" Background="#FFFFFF" CornerRadius="10" Padding="8"
+                    BorderBrush="#E2E8F0" BorderThickness="1">
+                <DataGrid x:Name="dgAlat"
+                          x:DataType="local:Alat"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          GridLinesVisibility="Horizontal"
+                          HeadersVisibility="Column"
+                          RowHeight="52"
+                          Background="#FFFFFF"
+                          Foreground="#0F172A"
+                          BorderThickness="0"
+                          SelectionChanged="DgAlat_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Alat" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="local:Alat">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                                                Spacing="12" Margin="8,0">
+                                        <Border Background="{Binding IkonBg}" CornerRadius="8"
+                                                Width="34" Height="34">
+                                            <TextBlock Text="{Binding Inisial}" Foreground="#FFFFFF"
+                                                       FontWeight="Bold" FontSize="11"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Nama}" FontWeight="Medium"
+                                                       FontSize="13" Foreground="#0F172A"/>
+                                            <TextBlock Text="{Binding KodeLokasi}" FontSize="11"
+                                                       Foreground="#64748B"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="Kategori" Binding="{Binding Kategori}" Width="175"/>
+                        <DataGridTextColumn Header="Unit" Binding="{Binding Jumlah}" Width="72"/>
+                        <DataGridTextColumn Header="Tgl Masuk" Binding="{Binding TanggalText}" Width="125"/>
+
+                        <DataGridTemplateColumn Header="Kondisi" Width="130">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate x:DataType="local:Alat">
+                                    <Border Background="{Binding KondisiBg}" CornerRadius="6"
+                                            Padding="8,3" Margin="8,0"
+                                            HorizontalAlignment="Left" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Kondisi}" Foreground="{Binding KondisiFg}"
+                                                   FontWeight="SemiBold" FontSize="11"/>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <TextBlock Grid.Row="3" x:Name="txtJumlah"
+                       Text="Menampilkan 0 dari 0 alat"
+                       FontSize="12" Foreground="#64748B"
+                       Margin="4,10,0,0"/>
+        </Grid>
+    </Grid>
+</Window>

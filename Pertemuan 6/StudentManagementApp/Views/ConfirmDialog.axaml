@@ -1,0 +1,19 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="StudentManagementApp.Views.ConfirmDialog"
+        Title="Konfirmasi"
+        Width="400" SizeToContent="Height"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource SurfaceBrush}">
+    <StackPanel Margin="24" Spacing="18">
+        <TextBlock x:Name="TitleText" FontSize="16" FontWeight="SemiBold"
+                   Foreground="{DynamicResource TextBrush}" />
+        <TextBlock x:Name="MessageText" TextWrapping="Wrap" FontSize="13"
+                   Foreground="{DynamicResource MutedTextBrush}" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+            <Button Content="Batal" Classes="ghost" Click="OnNo" IsCancel="True" />
+            <Button Content="Ya, hapus" Classes="danger" Click="OnYes" IsDefault="True" />
+        </StackPanel>
+    </StackPanel>
+</Window>
